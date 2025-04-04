@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import random
+import time
 
 
 # set up chromedriver
@@ -63,6 +64,26 @@ try:
         print("Item is moved to the right list box:", available_items1)
     else:
         print("Item is not moved to the right list box")
+        
+    # return the item to the left list box
+    move_left = driver.find_element(By.XPATH, '//*[@id="__next"]/section[3]/div/div/div/div/div/div[2]/button[1]')
+    move_left.click()
+    
+   
+    # move all elements to the right list box
+    all = driver.find_element(By.XPATH, '//*[@id="listhead"]/div[2]/div/a')
+    all.click()
+    
+    time.sleep(5)
+    move_right.click()
+    
+    print("Moved all items to the right list box")
+    time.sleep(5)
+    # Re-fetch the right list box after all items have been moved
+    dual_list2 = wait.until(EC.presence_of_element_located((By.XPATH, "(//ul[@class='list-group sp_list_group mb-20 mt-10'])[2]")))
+    all_moved_items = dual_list2.text.split("\n")
+    print("All moved items in the right list box:", all_moved_items)
+
         
 finally:
     # close the browser
